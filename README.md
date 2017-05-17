@@ -1,1 +1,2 @@
-# Skeleton project for Swagger
+# doc-store-firebase
+Implements firebase storage for files, and firebase realtime db for storing json
