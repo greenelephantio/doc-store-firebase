@@ -1,23 +1,36 @@
 'use strict';
 
-var SwaggerExpress = require('swagger-express-mw');
-var app = require('express')();
-module.exports = app; // for testing
+require('rootpath')();
+require('dotenv').config({silent: true});
 
-var config = {
-  appRoot: __dirname // required config
+const
+    SwaggerExpress = require('swagger-express-mw'),
+    requestLog = require('morgan'),
+    log = require('winston'),
+    app = require('express')(),
+    Firebase = require('api/services/firebase.service');
+
+module.exports = app;
+let firebase = new Firebase();
+
+app.use(requestLog('combined'));
+
+app.use((req, res, next) => {
+    req.log = log;
+    req.database = firebase;
+    next();
+});
+
+const config = {
+  appRoot: __dirname
 };
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) { throw err; }
 
-  // install middleware
   swaggerExpress.register(app);
 
   var port = process.env.PORT || 10010;
   app.listen(port);
-
-  if (swaggerExpress.runner.swagger.paths['/hello']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
-  }
+  log.info('app running on port %s...', port);
 });
