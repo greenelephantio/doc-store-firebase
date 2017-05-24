@@ -37,7 +37,7 @@ class Firebase {
             this.refs.documents
                 .child(newDocID)
                 .set(newDocument, function() {
-                    return resolve({id: newDocID});
+                    resolve({id: newDocID});
                 });
         });
     }
