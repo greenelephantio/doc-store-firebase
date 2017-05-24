@@ -6,6 +6,6 @@ module.exports = {
 
 function addNew(req, res){
     var r = req.database
-        .createDocument(req.body);
-    res.send(r);
+        .createDocument(req.body)
+        .then(res.send)
 }
