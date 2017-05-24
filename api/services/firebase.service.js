@@ -36,7 +36,9 @@ class Firebase {
         return new Promise(function(resolve, reject) {
             this.refs.documents
                 .child(newDocID)
-                .set(newDocument, function() {
+                .set(newDocument, function(err) {
+                    if(err) reject(err);
+
                     resolve({id: newDocID});
                 });
         });
