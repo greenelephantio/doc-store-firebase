@@ -12,6 +12,7 @@ consumes:
 produces:
   - application/json
 paths:
+
   /healthcheck:
     x-swagger-router-controller: health
     get:
@@ -22,6 +23,23 @@ paths:
           description: Succcess
           schema:
             $ref: "#/definitions/HealthCheckResponse"
+
+  /upload:
+    x-swagger-router-controller: document
+    post:
+      summary: Uploads a file
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: upFile
+          type: file
+          description: file to upload
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/UploadResponse"
 
   /document:
     x-swagger-router-controller: document
@@ -68,8 +86,13 @@ definitions:
 
   NewDocResponse:
     properties:
+      id:
+        type: string
+
+  UploadResponse:
+    properties:
       message:
-        type: object
+        type: string
 
   NewDocumentModel:
     required:

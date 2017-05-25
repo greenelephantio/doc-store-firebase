@@ -3,22 +3,13 @@
 require('rootpath')();
 const
     util = require('util'),
-    firebase = require('firebase-admin');
+    FireBase = require('./firebase.base');
 
-
-class Firebase {
-
+class FirebaseDatabase extends FireBase {
     constructor() {
-        //secure this with docker secrets
-        let firebaseCredentials = require("config/docstack-7c152-firebase-adminsdk-xt7c3-ab911e86a9.json");
-
-        firebase.initializeApp({
-          credential: firebase.credential.cert(firebaseCredentials),
-          databaseURL: process.env.FIREBASE_DATABASE_URL
-        });
-
-        this.firebaseDbRef = firebase.database();
-        let auth = firebase.auth(); // custom token from identity service later
+        super();
+        this.ref = this.firebase.database();
+        let auth = this.firebase.auth(); // custom token from identity service later
 
         //docs per client
         let client = auth.currentUser ? auth.currentUser.client : 0;
@@ -26,15 +17,15 @@ class Firebase {
         let user = "andrei"; //get user
         let userpath = util.format('documents/%s/%s', client, user);
         this.refs = {
-            documents: this.firebaseDbRef.ref().child(userpath)
+            documents: this.ref.ref().child(userpath)
         };
     }
 
     createDocument(newDocument) {
         let newDocID = this.refs.documents.push().key;
-
+        let self = this;
         return new Promise(function(resolve, reject) {
-            this.refs.documents
+            self.refs.documents
                 .child(newDocID)
                 .set(newDocument, function(err) {
                     if(err) reject(err);
@@ -45,4 +36,4 @@ class Firebase {
     }
 }
 
-module.exports = Firebase;
+module.exports = FirebaseDatabase;

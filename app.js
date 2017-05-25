@@ -8,16 +8,17 @@ const
     requestLog = require('morgan'),
     log = require('winston'),
     app = require('express')(),
-    Firebase = require('api/services/firebase.service');
+    FirebaseDatabase = require('api/services/firebase.database'),
+    FirebaseStorage = require('api/services/firebase.storage');
 
 module.exports = app;
-let firebase = new Firebase();
 
 app.use(requestLog('combined'));
 
 app.use((req, res, next) => {
     req.log = log;
-    req.database = firebase;
+    req.database = new FirebaseDatabase();
+    req.storage = new FirebaseStorage();
     next();
 });
 
