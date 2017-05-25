@@ -18,7 +18,7 @@ app.use(requestLog('combined'));
 app.use((req, res, next) => {
     req.log = log;
     req.database = new FirebaseDatabase();
-    req.storage = new FirebaseStorage();
+    // req.storage = new FirebaseStorage();
     next();
 });
 

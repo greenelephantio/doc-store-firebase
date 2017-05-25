@@ -6,11 +6,9 @@ const
     FireBase = require('./firebase.base');
 
 class FirebaseStorage extends FireBase {
-    constructor(){
+    constructor() {
         super();
-        this.ref = this.firebase.storage();
-
-        let auth = this.firebase.auth(); // custom token from identity service later
+        let auth = this.auth(); // custom token from identity service later
 
         //docs per client
         let client = auth.currentUser ? auth.currentUser.client : 0;
@@ -18,7 +16,7 @@ class FirebaseStorage extends FireBase {
         let user = "andrei"; //get user
         let userpath = util.format('files/%s/%s', client, user);
         this.refs = {
-            files: this.ref.ref().child(userpath)
+            files: this.storage().ref().child(userpath)
         };
     }
 

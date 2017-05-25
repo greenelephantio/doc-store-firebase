@@ -8,8 +8,7 @@ const
 class FirebaseDatabase extends FireBase {
     constructor() {
         super();
-        this.ref = this.firebase.database();
-        let auth = this.firebase.auth(); // custom token from identity service later
+        let auth = this.auth(); // custom token from identity service later
 
         //docs per client
         let client = auth.currentUser ? auth.currentUser.client : 0;
@@ -17,7 +16,7 @@ class FirebaseDatabase extends FireBase {
         let user = "andrei"; //get user
         let userpath = util.format('documents/%s/%s', client, user);
         this.refs = {
-            documents: this.ref.ref().child(userpath)
+            documents: this.database().ref().child(userpath)
         };
     }
 
